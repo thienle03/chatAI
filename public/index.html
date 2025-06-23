@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Hỏi Đáp (Groq)</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    #chat { margin-top: 20px; }
+    .user { font-weight: bold; }
+    .ai { margin-left: 20px; color: green; }
+  </style>
+</head>
+<body>
+  <h2>Hỏi đáp với AI (Groq)</h2>
+  <input type="text" id="userInput" placeholder="Nhập câu hỏi..." style="width: 100%;" />
+  <button onclick="sendMessage()">Gửi</button>
+
+  <div id="chat"></div>
+
+  <script>
+    async function sendMessage() {
+      const msg = document.getElementById("userInput").value;
+      const chatDiv = document.getElementById("chat");
+      chatDiv.innerHTML += `<p class="user">Bạn: ${msg}</p>`;
+
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg })
+      });
+
+      const data = await res.json();
+      chatDiv.innerHTML += `<p class="ai">AI: ${data.reply}</p>`;
+      document.getElementById("userInput").value = '';
+    }
+  </script>
+</body>
+</html>
